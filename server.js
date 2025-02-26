@@ -3,9 +3,13 @@ const cors = require("cors");
 const morgon = require("morgan");
 const dotenv = require("dotenv");
 const colors = require("colors");
+const connnectDb = require("./config/connectDb");
 
 // dotenv configuration
 dotenv.config();
+
+// database call
+connnectDb();
 
 // rest object
 const app = express();
