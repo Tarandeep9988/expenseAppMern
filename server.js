@@ -20,9 +20,7 @@ app.use(express.json());
 app.use(cors());
 
 // routes
-app.get('/', (req, res) => {
-    res.send('Hello from Server')
-})
+app.use('/api/v1/users', require('./routes/userRoute'));
 
 
 // port 

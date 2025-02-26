@@ -1,15 +1,24 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
+import axios from 'axios';
+
 
 const Register = () => {
+
+    const navigate = useNavigate();
+
     // Form submit
-    const submitHandler = (e) => {
+    const submitHandler = async (e) => {
         e.preventDefault();
         const formData = new FormData(e.target);
-        const data = Object.fromEntries(formData.entries()); // Convert to object
-
-        
-        
+        const data = Object.fromEntries(formData.entries()); // Convert to object   
+        try {
+          await axios.post('http://localhost:4000/api/v1/users/register', data);
+          alert('Registration successful. Proceed to login.');
+          navigate('/login');
+        } catch (error) {
+          alert('Something went wrong');
+        }
     }
 
   return (

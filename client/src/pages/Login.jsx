@@ -1,18 +1,27 @@
+import axios from "axios";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
 
-    // 
+    const navigate = useNavigate();
+
     // Form submit
-    const submitHandler = (e) => {
+    const submitHandler = async (e) => {
         e.preventDefault();
 
         const formData = new FormData(e.target);
 
         const data = Object.fromEntries(formData.entries());
 
-        console.log(data);
+        try {
+          const {response} = await axios.post('http://localhost:4000/api/v1/users/login', data);
+          alert('login success');
+          localStorage.setItem('user', JSON.stringify({...response, password:''}));
+          navigate('/');
+        } catch (error) {
+          alert('Something went wrong.');
+        }
         
         
     }
