@@ -1,5 +1,5 @@
 import axios from "axios";
-import React from "react";
+import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
@@ -12,19 +12,25 @@ const Login = () => {
 
         const formData = new FormData(e.target);
 
-        const data = Object.fromEntries(formData.entries());
+        const formDataObj = Object.fromEntries(formData.entries());
 
         try {
-          const {response} = await axios.post('http://localhost:4000/api/v1/users/login', data);
+          const {data} = await axios.post('http://localhost:4000/api/v1/users/login', formDataObj);
           alert('login success');
-          localStorage.setItem('user', JSON.stringify({...response, password:''}));
+          
+          localStorage.setItem('user', JSON.stringify({...data.user, password:''}));
           navigate('/');
         } catch (error) {
           alert('Something went wrong.');
         }
-        
-        
     }
+
+      // prevent for login user
+        useEffect (() => {
+          if (localStorage.removeItem('user')) {
+            navigate('/');
+          }
+        }, [navigate]);
 
   return (
     <>

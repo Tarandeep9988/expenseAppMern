@@ -1,5 +1,5 @@
 import './App.css'
-import {Routes, Route} from 'react-router-dom'
+import {Routes, Route, Navigate} from 'react-router-dom'
 import HomePage from './pages/HomePage'
 import Login from './pages/Login'
 import Register from './pages/Register'
@@ -15,5 +15,17 @@ function App() {
     </>
   )
 }
+
+
+export function ProtectedRoutes(props) {
+  if (localStorage.getItem('user')) {
+    return props.children;
+  }
+  else {
+    return <Navigate to='/login' />
+  }
+}
+
+
 
 export default App
