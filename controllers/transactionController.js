@@ -22,4 +22,4 @@ const addTransaction = async (req, res) => {
     }
 }
 
-module.exports = [getAllTransactions, addTransaction]
+module.exports = {getAllTransactions, addTransaction};
