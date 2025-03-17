@@ -98,5 +98,25 @@ const loginController = async (req, res, next) => {
     }
 }
 
+const setAvatarController = async(req, res, next) => {
+    try {
+        const userId = req.params.id;
 
-module.exports = {registerController};
+        const imageData = req.body.image;
+
+        const userData = await User.findByIdAndUpdate(userId, {
+            isAvatarImageSet: true,
+            avatarImage: imageData,
+        }, { new: true });
+        return res.status(200).json({
+            isSet: userData.isAvatarImageSet,
+            image: userData.avatarImage,
+        })
+    }
+    catch(err) {
+        next(err);
+    }
+}
+
+
+module.exports = {registerController, loginController, setAvatarController};

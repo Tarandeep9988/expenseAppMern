@@ -1,7 +1,10 @@
 const express = require("express");
-const { registerController } = require("../controllers/userController");
+const { registerController, loginController, setAvatarController } = require("../controllers/userController");
 
 const router = express.router();
 
 router.post("/register", registerController);
-router.post("/login", )
+
+router.post("/login", loginController);
+
+router.post("/setAvatar/:id", setAvatarController);
