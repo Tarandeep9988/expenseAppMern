@@ -1,5 +1,6 @@
 const Transaction = require("../models/TransactionModel");
-const User = require("../models/UserModel");
+const User = require("../models/UserModel")
+const mongoose = require("mongoose");
 
 const addTransactionController = async (req, res) => {
     try {
@@ -23,7 +24,7 @@ const addTransactionController = async (req, res) => {
             !category || 
             !transactionType
         ) {
-            return res.status(408).json({
+            return res.status(400).json({
                 success: false,
                 message: "Please Fill all fields",
             })
@@ -38,13 +39,13 @@ const addTransactionController = async (req, res) => {
         }
 
         let newTransaction = await Transaction.create({
-            title: title,
-            amount: amount,
-            category: category,
-            description: description,
-            date: date,
+            title,
+            amount,
+            category,
+            description,
+            date,
             user: userId,
-            transactionType: transactionType,
+            transactionType,
         });
 
         user.transactions.push(newTransaction);
@@ -57,33 +58,12 @@ const addTransactionController = async (req, res) => {
         });
     }
     catch (err) {
-        return res.status(401).json({
+        return res.status(500).json({
             success: false,
             message: err.message,
         });
     }
 };
 
-const getAllTransactionController = async(req, res) => {
-    try {
-        const { userId, type, frequency, startDate, endDate } = req.body;
-        console.log(userId, type, frequency, startDate, endDate);
 
-        const user = await User.findById(userId);
-
-        if (!user) {
-            return res.status(400).json({
-                success: false,
-                message: "User not found",
-            });
-        }
-
-        // Create a query object with the user and type conditions
-
-        const query = {
-            user: userId,
-        };
-        
-        
-    }
-}
+module.exports = { addTransactionController };
