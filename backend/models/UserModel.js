@@ -18,14 +18,6 @@ const userSchema = new mongoose.Schema({
         required: [true, "Password is required"],
         minlength: [6, "Password must be Atleast 6 character"],
     },
-    isAvatarImageSet: {
-        type: Boolean,
-        default: false,
-    },
-    avatarImage: {
-        type: String,
-        default: "",
-    },
     transactions: {
         type: [],
     },

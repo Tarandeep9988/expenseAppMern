@@ -6,7 +6,7 @@ const registerController = async (req, res, next) => {
   try {
     const {name, email, password} = req.body;
     
-    console.log(name, email, password);
+    // console.log(name, email, password);
 
     if (!name || !email || !password) {
         return res.status(400).json({
@@ -28,7 +28,7 @@ const registerController = async (req, res, next) => {
 
     const hashedPassword = await bcrypt.hash(password, salt);
     
-    console.log(hashedPassword);
+    // console.log(hashedPassword);
 
     let newUser = await User.create({
         name, 
@@ -56,7 +56,7 @@ const loginController = async (req, res, next) => {
     try {
         const { email, password } = req.body;
 
-        console.log(email, password);
+        // console.log(email, password);
 
         if (!email || !password) {
             return res.status(400).json({
@@ -67,16 +67,7 @@ const loginController = async (req, res, next) => {
 
         const user = await User.findOne({ email });
 
-        if (!user) {
-            return res.status(401).json({
-                success: false,
-                message: "User not found",
-            })
-        }
-
-        const isMatch = await bcrypt.compare(password, user.password);
-
-        if (!isMatch) {
+        if (!user || !await bcrypt.compare(password, user.password)) {
             return res.status(401).json({
                 success: false,
                 message: "Incorrect Email or Password",
@@ -98,25 +89,4 @@ const loginController = async (req, res, next) => {
     }
 }
 
-const setAvatarController = async(req, res, next) => {
-    try {
-        const userId = req.params.id;
-
-        const imageData = req.body.image;
-
-        const userData = await User.findByIdAndUpdate(userId, {
-            isAvatarImageSet: true,
-            avatarImage: imageData,
-        }, { new: true });
-        return res.status(200).json({
-            isSet: userData.isAvatarImageSet,
-            image: userData.avatarImage,
-        })
-    }
-    catch(err) {
-        next(err);
-    }
-}
-
-
-module.exports = {registerController, loginController, setAvatarController};
+module.exports = {registerController, loginController};

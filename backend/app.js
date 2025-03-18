@@ -13,6 +13,10 @@ connectDB();
 // Middleware
 app.use(express.json());
 
+//Router
+app.use("/api/auth", require("./router/userRoutes"));
+// app.use("/api/v1", require("./router/transactionRoutes"))
+
 app.get("/", (req, res) => {
     res.send("Hello World");
 });
