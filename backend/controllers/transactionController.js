@@ -65,5 +65,149 @@ const addTransactionController = async (req, res) => {
     }
 };
 
+const getAllTransactionController = async (req, res) => {
+    try {
+        const { userId, type, frequency, startDate, endDate } = req.body;
 
-module.exports = { addTransactionController };
+        console.log(userId, type, frequency, startDate, endDate);
+
+        const user = await User.findById(userId);
+        
+        if(!user) {
+            return res.status(400).json({
+                success: false,
+                message: "User not found",
+            });
+        }
+
+        // Create a query object with the user and type conditions
+        const query = {
+            user: userId,
+        };
+
+        if (type !== "all") {
+            query.transactionType = type;
+        }
+
+        // Add date conditions based on 'frequency' and 'custom' range
+        if (frequency !== 'custom') {
+            // This part is still left
+            return res.status(500).json({
+                success: false,
+                message: "frequency !== custom is not implemented yet",
+            })
+        }
+        
+        console.log(query);
+
+        const transactions = await Transaction.find(query);
+
+        console.log(transactions);
+
+        return res.status(200).json({
+            success: true,
+            transactions,
+        });
+    } catch(err) {
+        return res.status(500).json({
+            success: false,
+            message: err.message,
+        });
+    }
+}
+
+const deleteTransactionController = async (req, res) => {
+    try {
+        const transactionId = req.params.id;
+        const userId = req.body.userId;
+
+        console.log(transactionId, userId);
+
+        const user = await User.findById(userId);
+
+        if (!user) {
+            return res.status(400).json({
+                success: false,
+                message: "User not found",
+            });
+        }
+        
+        const transactionElement = await Transaction.findByIdAndDelete(
+            transactionId
+        );
+
+        if (!transactionElement) {
+            return res.status(400).json({
+                success: false,
+                message: "transaction not found",
+            });
+        }
+
+        const transactionArr = user.transactions.filter(
+            (transaction) => transaction._id === transactionId
+        );
+
+        user.transactions = transactionArr;
+
+        user.save();
+
+        return res.status(200).json({
+            success: true,
+            message: "Transaction successfully deleted",
+        });
+
+    } catch(err) {
+        return res.status(500).json({
+            success: false,
+            message: err.message,
+        })
+    }
+}
+
+const updateTransactionController = async (req, res) => {
+    try {
+        const transactionId = req.params.id;
+
+        const { title, amount, description, date, category, transactionType } = req.body;
+
+        const transactionElement = await Transaction.findById(transactionId);
+
+        if (!transactionElement) {
+            return res.status(400).json({
+                success: false,
+                message: "Transaction not found",
+            });
+        }
+        if (title) {
+            transactionElement.title = title;
+        }
+        if (description) {
+            transactionElement.description = description;
+        }
+        if (amount) {
+            transactionElement.amount = amount;
+        }
+        if (category) {
+            transactionElement.category = category;
+        }
+        if (transactionType) {
+            transactionElement.transactionType = transactionType;
+        }
+
+        await transactionElement.save();
+
+        return res.status(200).json({
+            success: true,
+            message: "Transaction Updated Successfully",
+            transaction: transactionElement,
+        });
+
+    } catch (err) {
+        return res.status(500).json({
+            success: false,
+            message: err.message,
+        })
+    }
+}
+
+module.exports = { addTransactionController , getAllTransactionController, updateTransactionController, deleteTransactionController};
