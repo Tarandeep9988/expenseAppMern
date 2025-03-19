@@ -48,11 +48,11 @@ const addTransactionController = async (req, res) => {
             transactionType,
         });
 
-        user.transactions.push(newTransaction);
+        user.transactions.push(newTransaction._id);
 
-        user.save();
+        await user.save();
 
-        return res.status(200).json({
+        return res.status(201).json({
             success: true,
             message: "Transaction Added Successfully",
         });
@@ -78,6 +78,14 @@ const getAllTransactionController = async (req, res) => {
                 success: false,
                 message: "User not found",
             });
+        }
+        
+        // Checking transaction type
+        if (type !== "income" || type !== "expense" || type !== "all") {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid transaction type",
+            })
         }
 
         // Create a query object with the user and type conditions
@@ -144,12 +152,12 @@ const deleteTransactionController = async (req, res) => {
         }
 
         const transactionArr = user.transactions.filter(
-            (transaction) => transaction._id === transactionId
+            (id) => id.toString() !== transactionId.toString()
         );
 
         user.transactions = transactionArr;
 
-        user.save();
+        await user.save();
 
         return res.status(200).json({
             success: true,
@@ -193,6 +201,9 @@ const updateTransactionController = async (req, res) => {
         if (transactionType) {
             transactionElement.transactionType = transactionType;
         }
+        if (date) {
+            transactionElement.date = date;
+        }        
 
         await transactionElement.save();
 

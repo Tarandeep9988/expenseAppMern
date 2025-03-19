@@ -11,16 +11,20 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: [true, "Email is required"],
         unique: true, 
-        validate: validator.isEmail,
+        validate: {
+            validator: validator.isEmail,
+            message: "Invalid email format",
+        }
     }, 
     password: {
         type: String, 
         required: [true, "Password is required"],
         minlength: [6, "Password must be Atleast 6 character"],
     },
-    transactions: {
-        type: [],
-    },
+    transactions: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Transaction'
+    }],
 }, { timestamps: true })
 
 const User = mongoose.model("User", userSchema);
