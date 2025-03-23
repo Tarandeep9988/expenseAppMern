@@ -2,7 +2,7 @@ const express = require("express");
 const dotenv = require("dotenv");
 const connectDB = require("./DB/database");
 const morgan = require("morgan");
-
+const cors = require("cors");
 
 dotenv.config();
 const app = express();
@@ -14,6 +14,7 @@ connectDB();
 // Middleware
 app.use(express.json());
 app.use(morgan("tiny"));
+app.use(cors());
 
 //Router
 app.use("/api/auth", require("./router/userRoutes"));

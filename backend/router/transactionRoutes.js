@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.post("/addTransaction", addTransactionController);
 router.post("/getTransaction", getAllTransactionController);
-router.post("/deleteTransaction/:id", deleteTransactionController);
-router.post("/updateTransaction/:id", updateTransactionController);
+router.delete("/deleteTransaction/:id", deleteTransactionController);
+router.put("/updateTransaction/:id", updateTransactionController);
 
 module.exports = router;

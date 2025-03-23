@@ -81,7 +81,7 @@ const getAllTransactionController = async (req, res) => {
         }
         
         // Checking transaction type
-        if (type !== "income" || type !== "expense" || type !== "all") {
+        if (type !== "income" && type !== "expense" && type !== "all") {
             return res.status(400).json({
                 success: false,
                 message: "Invalid transaction type",

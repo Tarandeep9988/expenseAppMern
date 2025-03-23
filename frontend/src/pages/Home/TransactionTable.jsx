@@ -1,6 +1,8 @@
 import React from 'react'
 
-const TransactionTable = () => {
+const TransactionTable = ({transactions}) => {
+    console.log(transactions);
+    
   return (
     <table className='w-full'>
         <thead className='bg-white text-black'>
@@ -14,14 +16,24 @@ const TransactionTable = () => {
             </tr>
         </thead>
         <tbody>
-            <tr className='border-b border-b-white'>
+            {transactions.map((transaction, index) => (
+                <tr key={index} className='border-b border-b-white'>
+                    <td>{transaction.date}</td>
+                    <td>{transaction.title}</td>
+                    <td>{transaction.amount}</td>
+                    <td>{transaction.transactionType}</td>
+                    <td>{transaction.description}</td>
+                    <td>Pending</td>
+                </tr>
+            ))}
+            {/* <tr className='border-b border-b-white'>
                 <td>something</td>
                 <td>something</td>
                 <td>something</td>
                 <td>something</td>
                 <td>something</td>
                 <td>something</td>
-            </tr>
+            </tr> */}
         </tbody>
     </table>
   )
