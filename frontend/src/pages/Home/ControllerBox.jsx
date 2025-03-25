@@ -1,8 +1,15 @@
-import React from 'react'
+import React, { useState } from 'react'
+import TransactionForm from '../../components/TransactionForm'
 
 const ControllerBox = () => {
+    const [form, setForm] = useState(false);
+    const toggleForm = () => {
+        setForm(!form);
+    }
+
   return (
     <div className='text-xl'>
+        {form && <TransactionForm toggleForm={toggleForm} />}
         <div className='flex justify-between items-center'>
         <div>
             <p>Select Frequency</p>
@@ -22,7 +29,7 @@ const ControllerBox = () => {
             </select>
         </div>
         <div>
-            <button className='bg-blue-500 p-2 rounded-lg cursor-pointer'>Add new</button>
+            <button className='bg-blue-500 p-2 rounded-lg cursor-pointer' onClick={toggleForm}>Add new</button>
         </div>
     </div>
     <div className='flex justify-center items-center my-10'>

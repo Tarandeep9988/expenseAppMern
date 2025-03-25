@@ -9,11 +9,11 @@ const RegisterPage = () => {
         const formData = Object.fromEntries(new FormData(e.target));
         try {
             const response = await axios.post('http://localhost:3000/api/auth/register', formData);
-            alert('Login success');
+            alert('Register success');
             navigate('/login');
         } catch (error) {
-            alert('Login failed');
             console.log(error);
+            alert('Register failed');
         }
     }
   return (
